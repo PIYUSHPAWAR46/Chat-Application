@@ -26,7 +26,7 @@ export const sendMessage = async(req,res)=>{
         message,
     });
     if(newMessage){
-        conversation.message.push(newMessage._id);
+        conversation.messages.push(newMessage._id);
     }
 
     // await conversation.save();
@@ -54,16 +54,16 @@ export const getMessage = async(req,res)=>{
         const senderId = req.user._id;
 
         const conversation = await Conversation.findOne({
-            participants: { $all : [senderId, userToChatId]}
-        }).populate("message");
+            participants: { $all : [senderId, userToChatId]},
+        }).populate("messages");
 
         if(!conversation){
             return res.status(200).json([])
         }
 
-        const message = conversation.message;
+        const messages = conversation.messages;
 
-        res.status(200).json(message);
+        res.status(200).json(messages);
 
 
     }catch(error){
